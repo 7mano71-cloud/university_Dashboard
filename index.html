@@ -185,37 +185,121 @@ aside{
 /* MAIN */
 main{flex:1;padding:24px 28px;overflow-x:hidden;}
 
-/* FILTER BAR */
+/* ── FILTER BAR ── */
+/* DESKTOP: horizontal row of selects */
 .filter-bar{
   background:white;border:1px solid var(--gray2);border-radius:12px;
-  padding:12px 16px;margin-bottom:18px;
-  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  box-shadow:var(--shadow);
+  padding:10px 14px;margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;flex-wrap:nowrap;
+  box-shadow:var(--shadow);overflow-x:auto;
 }
-.filter-group{display:flex;align-items:center;gap:8px;}
-.filter-group label{font-size:10px;font-weight:700;color:var(--gray3);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
-.filter-divider{width:1px;height:26px;background:var(--gray2);}
-.dd-wrap{position:relative;}
+/* Each label+select group — INLINE on desktop */
+.filter-group{
+  display:flex;align-items:center;gap:6px;
+  flex-shrink:0;
+}
+.filter-group label{
+  font-size:10px;font-weight:700;color:var(--gray3);
+  letter-spacing:1px;text-transform:uppercase;white-space:nowrap;
+}
+.filter-divider{width:1px;height:24px;background:var(--gray2);flex-shrink:0;}
+.dd-wrap{position:relative;flex-shrink:0;}
 .dd-wrap select{
   appearance:none;-webkit-appearance:none;
   background:white;border:1.5px solid var(--gray2);border-radius:8px;
-  padding:7px 30px 7px 12px;font-size:12px;font-weight:600;
+  padding:6px 26px 6px 10px;font-size:12px;font-weight:600;
   color:var(--dark);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;
-  outline:none;transition:border-color 0.15s;min-width:110px;
+  outline:none;transition:border-color 0.15s;min-width:100px;
 }
 .dd-wrap select:hover,.dd-wrap select:focus{border-color:var(--navy);}
-.dd-wrap::after{content:'▾';position:absolute;right:9px;top:50%;transform:translateY(-50%);
-  pointer-events:none;color:var(--gray3);font-size:11px;}
+.dd-wrap::after{
+  content:'▾';position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  pointer-events:none;color:var(--gray3);font-size:10px;
+}
 .filter-reset{
-  margin-left:auto;padding:7px 14px;border-radius:8px;
+  margin-left:auto;flex-shrink:0;
+  padding:6px 12px;border-radius:8px;
   background:var(--navy-light);border:none;color:var(--navy);
-  font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;
+  font-size:11px;font-weight:700;cursor:pointer;
+  transition:all 0.15s;white-space:nowrap;
 }
 .filter-reset:hover{background:var(--navy);color:white;}
-.active-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;min-height:0;}
+/* Pills */
+.active-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;min-height:0;}
 .af-pill{background:var(--navy);color:white;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:6px;}
 .af-pill button{background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;font-size:13px;line-height:1;padding:0;}
 .af-pill button:hover{color:white;}
+/* Hide mobile-only elements on desktop */
+.mob-filter-toggle{display:none;}
+.filter-bar-bottom{display:none;}
+.filter-apply-mob{display:none;}
+/* Desktop: hide the grid wrapper (used only on mobile) */
+.filter-grid-mob{display:contents;}
+
+/* Mobile toggle button */
+.mob-filter-toggle{
+  width:100%;padding:10px 14px;
+  background:white;border:1.5px solid var(--gray2);border-radius:12px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  color:var(--navy);cursor:pointer;margin-bottom:0;
+  align-items:center;justify-content:space-between;
+  box-shadow:var(--shadow);transition:all 0.15s;
+}
+.mob-filter-toggle:hover{border-color:var(--navy);}
+.mob-filter-toggle .mft-right{display:flex;align-items:center;gap:8px;}
+.mob-filter-badge{
+  background:var(--navy);color:white;font-size:10px;font-weight:700;
+  padding:2px 7px;border-radius:20px;
+}
+.mft-arrow{font-size:11px;color:var(--gray3);transition:transform 0.25s;display:inline-block;}
+.mft-arrow.open{transform:rotate(180deg);}
+
+/* ── MOBILE OVERRIDES (≤768px) ── */
+@media(max-width:768px){
+  /* Show toggle button */
+  .mob-filter-toggle{display:flex;}
+  /* Filter bar: hidden by default, shown when .open */
+  .filter-bar{
+    display:none;
+    flex-direction:column;align-items:stretch;flex-wrap:wrap;
+    padding:12px;gap:10px;overflow-x:visible;
+    border-radius:0 0 12px 12px;border-top:2px solid var(--navy-light);
+    margin-bottom:0;margin-top:0;
+  }
+  .filter-bar.open{display:flex;}
+  /* Grid for filter items */
+  .filter-grid-mob{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    width:100%;
+  }
+  .filter-group{
+    flex-direction:column;align-items:flex-start;gap:4px;width:100%;
+  }
+  .filter-group label{font-size:10px;}
+  .filter-divider{display:none;}
+  .dd-wrap{width:100%;}
+  .dd-wrap select{
+    font-size:16px !important;
+    padding:10px 30px 10px 10px;
+    width:100%;min-width:0;
+  }
+  /* Bottom action row */
+  .filter-bar-bottom{
+    display:flex;gap:8px;
+    margin-top:4px;padding-top:10px;border-top:1px solid var(--gray2);
+  }
+  .filter-reset{margin-left:0;flex:1;padding:11px;justify-content:center;font-size:12px;}
+  .filter-apply-mob{
+    flex:1;padding:11px;border-radius:9px;
+    background:var(--navy);border:none;color:white;
+    font-size:12px;font-weight:800;cursor:pointer;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    display:flex;align-items:center;justify-content:center;gap:5px;
+  }
+  .filter-apply-mob:active{background:var(--navy-dark);}
+  /* Hide desktop reset (there's one in filter-bar-bottom) */
+  #desktopReset{display:none;}
+}
 
 /* SECTIONS */
 .section{display:none;}
@@ -298,54 +382,73 @@ tbody tr:hover td{background:var(--navy-light);}
 .td-total{background:var(--gray) !important;font-weight:700;}
 
 /* MOBILE NAV */
-@media(max-width:1024px){aside{display:none;}.g2,.g3{grid-template-columns:1fr;}}
+/* ══════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════ */
+@media(max-width:1024px){
+  aside{display:none;}
+  .g3{grid-template-columns:1fr 1fr;}
+}
 @media(max-width:768px){
-  main{padding:12px;padding-bottom:90px;}
-  #dashboard-wrap header{padding:0 12px;height:56px;}
-  .filter-bar{padding:10px 12px;gap:8px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;}
-  .filter-group,.dd-wrap select{flex-shrink:0;}
-  .filter-divider{display:none;}
-  .kpi-row{grid-template-columns:1fr 1fr;gap:10px;}
-  .kpi-value{font-size:22px;}
-  .card{padding:12px;}
-  .h300{height:240px !important;}.h260{height:220px !important;}
-  .h200{height:190px !important;}.h160{height:160px !important;}
-  .g2,.g3{grid-template-columns:1fr !important;}
-  .kpi-n-item{min-width:100px;}
-  .dd-wrap select{font-size:16px !important;}
-  /* hide credits on mobile */
+  #dashboard-wrap header{padding:0 14px;height:54px;}
+  .header-title{font-size:15px;}
+  .header-subtitle{display:none;}
+  main{padding:10px 10px;padding-bottom:76px !important;}
+  /* filter bar styles handled in dedicated filter CSS block above */
+  .kpi-row{grid-template-columns:1fr 1fr;gap:8px;}
+  .kpi{padding:14px;}
+  .kpi-value{font-size:21px;}
+  .kpi-label{font-size:10px;}
+  .card{padding:12px 10px;}
+  .card-title{font-size:12px;}
+  .h300{height:220px !important;}
+  .h260{height:200px !important;}
+  .h200{height:180px !important;}
+  .h160{height:150px !important;}
+  .g2{grid-template-columns:1fr !important;}
+  .g3{grid-template-columns:1fr !important;}
+  .kpi-navy{flex-direction:column;gap:12px;}
+  .kpi-n-item{border-right:none !important;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:12px;padding-right:0;margin-right:0;}
+  .kpi-n-item:last-child{border-bottom:none;padding-bottom:0;}
+  .programs-grid{grid-template-columns:1fr 1fr;}
+  .prog-card{padding:14px 10px;}
+  .prog-icon{font-size:24px;}
+  .fac-grid{grid-template-columns:1fr 1fr;}
+  .tbl-wrap{font-size:11px;}
+  thead th{padding:8px 6px;}tbody td{padding:7px 6px;}
+  .section-title{font-size:17px;}
   .credits-footer{display:none !important;}
-  main{padding-bottom:72px !important;}
+}
+@media(max-width:380px){
+  .kpi-row{grid-template-columns:1fr;}
+  .programs-grid{grid-template-columns:1fr;}
+  .fac-grid{grid-template-columns:1fr;}
 }
 @media(min-width:769px){
   .mobile-nav{display:none !important;}
   .mob-drawer,.mob-drawer-overlay{display:none !important;}
 }
-
-/* ── NEW MOBILE NAV BAR ── */
+/* ── MOBILE NAV BAR ── */
 .mobile-nav{
-  display:none;
-  position:fixed;bottom:0;left:0;right:0;z-index:400;
-  background:var(--navy);
-  padding:10px 16px;
-  padding-bottom:max(10px,env(safe-area-inset-bottom));
-  box-shadow:0 -3px 16px rgba(26,58,107,0.35);
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:400;
+  background:var(--navy);height:56px;padding:0 14px;
+  padding-bottom:env(safe-area-inset-bottom);
+  box-shadow:0 -3px 20px rgba(15,36,72,0.4);
   align-items:center;justify-content:space-between;gap:10px;
 }
 @media(max-width:768px){.mobile-nav{display:flex !important;}}
+.mob-cur-section{display:flex;align-items:center;gap:8px;flex:1;overflow:hidden;}
+.mob-section-icon{font-size:18px;flex-shrink:0;}
+#mob-section-name{color:#fff;font-size:14px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .mobile-nav .mobile-nav-btn{
-  display:flex;align-items:center;gap:8px;
-  background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);
-  border-radius:10px;color:white;font-size:13px;font-weight:700;
-  padding:9px 16px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;
-  flex-shrink:0;white-space:nowrap;
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.22);
+  border-radius:10px;color:#fff;font-size:12px;font-weight:700;
+  padding:8px 14px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;
+  flex-shrink:0;white-space:nowrap;transition:background 0.15s;
 }
-.mob-cur-section{
-  flex:1;text-align:center;color:rgba(255,255,255,0.65);
-  font-size:12px;font-weight:600;letter-spacing:0.3px;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 8px;
-}
-#mob-section-name{color:rgba(255,255,255,0.95);}
+.mobile-nav .mobile-nav-btn:active{background:rgba(255,255,255,0.28);}
+.mobile-nav .mobile-nav-btn .mn-icon{font-size:15px;}
 
 /* ── DRAWER OVERLAY ── */
 .mob-drawer-overlay{
@@ -564,7 +667,7 @@ function enterDash() {
   </div>
   <div class="sidebar-section" style="margin-top:8px">
     <div class="sidebar-label">Financial</div>
-    <button class="nav-item" onclick="nav('financial',this)"><span class="nav-icon">💰</span>Financial</button>
+    <button class="nav-item" onclick="nav('financial',this)"><span class="nav-icon">💳</span>Student Funding</button>
   </div>
 </aside>
 
@@ -572,7 +675,22 @@ function enterDash() {
 <main>
 
 <!-- FILTER BAR -->
+<!-- MOBILE: Filter toggle button -->
+<button class="mob-filter-toggle" id="mobFilterToggle" onclick="toggleMobFilter()">
+  <span style="display:flex;align-items:center;gap:8px;">
+    <span>🔽</span>
+    <span>Filters</span>
+    <span class="mob-filter-badge" id="activeFilterCount" style="display:none">0</span>
+  </span>
+  <span class="mft-right">
+    <span id="mob-active-summary" style="font-size:11px;color:var(--gray3);font-weight:500;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+    <span class="mft-arrow" id="mftArrow">▾</span>
+  </span>
+</button>
+
+<!-- FILTER BAR — desktop: flex row | mobile: grid panel -->
 <div class="filter-bar" id="filterBar">
+  <!-- Desktop layout: all inline -->
   <div class="filter-group">
     <label>YEAR</label>
     <div class="dd-wrap">
@@ -597,48 +715,83 @@ function enterDash() {
     </div>
   </div>
   <div class="filter-divider"></div>
-  <div class="filter-group">
-    <label>PROGRAM</label>
-    <div class="dd-wrap">
-      <select id="f-prog" onchange="onFilterChange()">
-        <option value="All">All Programs</option>
-        <option value="CE">CE</option><option value="EC">EC</option><option value="CS">CS</option>
-      </select>
+  <!-- Mobile: wrap in grid -->
+  <div class="filter-grid-mob" id="filterGridMob">
+    <div class="filter-group">
+      <label>PROGRAM</label>
+      <div class="dd-wrap">
+        <select id="f-prog" onchange="onFilterChange()">
+          <option value="All">All Programs</option>
+          <option value="CE">Computer Eng</option>
+          <option value="EC">Electrical Eng</option>
+          <option value="CS">Data Science</option>
+          <option value="CVE">Civil Eng</option>
+          <option value="ME">Mechanical Eng</option>
+          <option value="BA">Business Admin</option>
+        </select>
+      </div>
     </div>
-  </div>
-  <div class="filter-divider"></div>
-  <div class="filter-group">
-    <label>GENDER</label>
-    <div class="dd-wrap">
-      <select id="f-gender" onchange="onFilterChange()">
-        <option value="All">All Genders</option>
-        <option value="Male">Male</option><option value="Female">Female</option>
-      </select>
+    <div class="filter-group">
+      <label>GENDER</label>
+      <div class="dd-wrap">
+        <select id="f-gender" onchange="onFilterChange()">
+          <option value="All">All Genders</option>
+          <option value="Male">Male</option><option value="Female">Female</option>
+        </select>
+      </div>
     </div>
-  </div>
-  <div class="filter-divider"></div>
-  <div class="filter-group">
-    <label>NATIONALITY</label>
-    <div class="dd-wrap">
-      <select id="f-nat" onchange="onFilterChange()">
-        <option value="All">All</option>
-        <option value="Kuwaiti">Kuwaiti</option><option value="Non-Kuwaiti">Non-Kuwaiti</option>
-      </select>
+    <div class="filter-group">
+      <label>NATIONALITY</label>
+      <div class="dd-wrap">
+        <select id="f-nat" onchange="onFilterChange()">
+          <option value="All">All Nationalities</option>
+          <optgroup label="Gulf GCC">
+            <option value="Kuwaiti">🇰🇼 Kuwaiti</option>
+            <option value="Saudi">🇸🇦 Saudi</option>
+            <option value="Emirati">🇦🇪 Emirati</option>
+            <option value="Bahraini">🇧🇭 Bahraini</option>
+            <option value="Qatari">🇶🇦 Qatari</option>
+            <option value="Omani">🇴🇲 Omani</option>
+          </optgroup>
+          <optgroup label="Arab">
+            <option value="Egyptian">🇪🇬 Egyptian</option>
+            <option value="Syrian">🇸🇾 Syrian</option>
+            <option value="Jordanian">🇯🇴 Jordanian</option>
+            <option value="Lebanese">🇱🇧 Lebanese</option>
+            <option value="Iraqi">🇮🇶 Iraqi</option>
+            <option value="Other Arab">🌍 Other Arab</option>
+          </optgroup>
+          <optgroup label="Asian">
+            <option value="Indian">🇮🇳 Indian</option>
+            <option value="Pakistani">🇵🇰 Pakistani</option>
+            <option value="Filipino">🇵🇭 Filipino</option>
+            <option value="Other Asian">🌏 Other Asian</option>
+          </optgroup>
+          <optgroup label="Western">
+            <option value="Western">🌎 Western</option>
+          </optgroup>
+        </select>
+      </div>
     </div>
-  </div>
-  <div class="filter-divider"></div>
-  <div class="filter-group">
-    <label>STANDING</label>
-    <div class="dd-wrap">
-      <select id="f-standing" onchange="onFilterChange()">
-        <option value="All">All Standing</option>
-        <option value="Excellent">Excellent</option><option value="Very Good">Very Good</option>
-        <option value="Good">Good</option><option value="Satisfactory">Satisfactory</option>
-        <option value="Probation">Probation</option>
-      </select>
+    <div class="filter-group">
+      <label>STANDING</label>
+      <div class="dd-wrap">
+        <select id="f-standing" onchange="onFilterChange()">
+          <option value="All">All Standing</option>
+          <option value="Excellent">Excellent</option><option value="Very Good">Very Good</option>
+          <option value="Good">Good</option><option value="Satisfactory">Satisfactory</option>
+          <option value="Probation">Probation</option>
+        </select>
+      </div>
     </div>
+  </div><!-- /filter-grid-mob -->
+  <!-- Desktop reset -->
+  <button class="filter-reset" onclick="resetFilters()" id="desktopReset">↺ Reset</button>
+  <!-- Mobile bottom row -->
+  <div class="filter-bar-bottom">
+    <button class="filter-reset" onclick="resetFilters()">↺ Reset All</button>
+    <button class="filter-apply-mob" onclick="applyMobFilter()">✓ Apply Filters</button>
   </div>
-  <button class="filter-reset" onclick="resetFilters()">↺ Reset</button>
 </div>
 <div class="active-filters" id="activePills"></div>
 
@@ -689,7 +842,7 @@ function enterDash() {
   </div>
   <div class="grid g2">
     <div class="card"><div class="card-title">Gender Over Time <span class="badge">Bar</span></div><div class="cw h200"><canvas id="ov-gender"></canvas></div></div>
-    <div class="card"><div class="card-title">Sponsor Distribution <span class="badge">Doughnut</span></div><div class="cw h200"><canvas id="ov-sponsor"></canvas></div></div>
+    <div class="card"><div class="card-title">Student Nationality Groups <span class="badge">Doughnut</span></div><div class="cw h200"><canvas id="ov-sponsor"></canvas></div></div>
   </div>
 </div>
 
@@ -881,38 +1034,38 @@ function enterDash() {
     <div class="prog-card">
       <div class="prog-icon">💻</div>
       <div class="prog-name">Computer Engineering</div>
-      <div class="prog-type">Bachelor of Science</div>
-      <span class="prog-badge">CE · 979 Students</span>
+      <div class="prog-type">Bachelor of Science · CE</div>
+      <span class="prog-badge">979 Students · Active</span>
     </div>
     <div class="prog-card">
       <div class="prog-icon">⚡</div>
       <div class="prog-name">Electrical Engineering</div>
-      <div class="prog-type">Bachelor of Science</div>
-      <span class="prog-badge">EC · 525 Students</span>
-    </div>
-    <div class="prog-card">
-      <div class="prog-icon">🏗️</div>
-      <div class="prog-name">Civil Engineering</div>
-      <div class="prog-type">Bachelor of Science</div>
-      <span class="prog-badge">CVE · Coming Soon</span>
-    </div>
-    <div class="prog-card">
-      <div class="prog-icon">⚙️</div>
-      <div class="prog-name">Mechanical Engineering</div>
-      <div class="prog-type">Bachelor of Science</div>
-      <span class="prog-badge">ME · Coming Soon</span>
-    </div>
-    <div class="prog-card">
-      <div class="prog-icon">💼</div>
-      <div class="prog-name">Business Administration</div>
-      <div class="prog-type">Bachelor of Business</div>
-      <span class="prog-badge">BA · Coming Soon</span>
+      <div class="prog-type">Bachelor of Science · EC</div>
+      <span class="prog-badge">525 Students · Active</span>
     </div>
     <div class="prog-card">
       <div class="prog-icon">📊</div>
       <div class="prog-name">Data Science</div>
-      <div class="prog-type">Bachelor of Science</div>
-      <span class="prog-badge">CS · 224 Students</span>
+      <div class="prog-type">Bachelor of Science · CS</div>
+      <span class="prog-badge">224 Students · Active</span>
+    </div>
+    <div class="prog-card">
+      <div class="prog-icon">🏗️</div>
+      <div class="prog-name">Civil Engineering</div>
+      <div class="prog-type">Bachelor of Science · CVE</div>
+      <span class="prog-badge" style="background:#fff3cd;color:#856404;">Launching 2025</span>
+    </div>
+    <div class="prog-card">
+      <div class="prog-icon">⚙️</div>
+      <div class="prog-name">Mechanical Engineering</div>
+      <div class="prog-type">Bachelor of Science · ME</div>
+      <span class="prog-badge" style="background:#fff3cd;color:#856404;">Launching 2026</span>
+    </div>
+    <div class="prog-card">
+      <div class="prog-icon">💼</div>
+      <div class="prog-name">Business Administration</div>
+      <div class="prog-type">Bachelor of Business · BA</div>
+      <span class="prog-badge" style="background:#fff3cd;color:#856404;">Launching 2026</span>
     </div>
   </div>
   <div class="grid g2">
@@ -926,32 +1079,120 @@ function enterDash() {
 
 <!-- ══ FINANCIAL ══ -->
 <div id="financial" class="section">
-  <div class="section-header"><div class="section-title">Financial — Tuition Fees</div></div>
+  <div class="section-header"><div class="section-title">Student Funding Sources</div></div>
+
+  <!-- Big KPI banner -->
+  <div class="kpi-navy" style="margin-bottom:18px;">
+    <div class="kpi-n-item">
+      <div class="kpi-n-label">💳 Self-Funded</div>
+      <div class="kpi-n-val">38%</div>
+      <div class="kpi-n-sub">856 students pay personally</div>
+    </div>
+    <div class="kpi-n-item">
+      <div class="kpi-n-label">🏦 Bank Loan</div>
+      <div class="kpi-n-val">22%</div>
+      <div class="kpi-n-sub">496 students via loan</div>
+    </div>
+    <div class="kpi-n-item">
+      <div class="kpi-n-label">🏛️ Government Support</div>
+      <div class="kpi-n-val">27%</div>
+      <div class="kpi-n-sub">609 students government-funded</div>
+    </div>
+    <div class="kpi-n-item">
+      <div class="kpi-n-label">🏢 Employer Support</div>
+      <div class="kpi-n-val">13%</div>
+      <div class="kpi-n-sub">295 students employer-funded</div>
+    </div>
+  </div>
+
+  <!-- KPI cards row -->
   <div class="kpi-row">
-    <div class="kpi"><div class="kpi-label">Fall 2024-25</div><div class="kpi-value">3.71M</div><div class="kpi-sub">1,576 students</div></div>
-    <div class="kpi green"><div class="kpi-label">Spring 2024-25</div><div class="kpi-value">3.68M</div><div class="kpi-sub">1,754 students</div></div>
-    <div class="kpi blue"><div class="kpi-label">Summer 2024-25</div><div class="kpi-value">1.33M</div><div class="kpi-sub">1,538 students</div></div>
-    <div class="kpi amber"><div class="kpi-label">Annual Total</div><div class="kpi-value">8.71M KD</div></div>
+    <div class="kpi">
+      <div class="kpi-label">Total Students Funded</div>
+      <div class="kpi-value">2,256</div>
+      <div class="kpi-sub">Fall 2024-25</div>
+      <div class="kpi-trend up">▲ +128 vs prev year</div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-label">Avg. Tuition / Student</div>
+      <div class="kpi-value">1,785 KD</div>
+      <div class="kpi-sub">Per semester</div>
+      <div class="kpi-trend up">▲ Stable</div>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-label">Employer Partners</div>
+      <div class="kpi-value">63</div>
+      <div class="kpi-sub">Active MoUs</div>
+      <div class="kpi-trend up">▲ +8 this year</div>
+    </div>
+    <div class="kpi amber">
+      <div class="kpi-label">Loans Approved</div>
+      <div class="kpi-value">496</div>
+      <div class="kpi-sub">Via 4 partner banks</div>
+    </div>
+    <div class="kpi purple">
+      <div class="kpi-label">Govt. Scholarships</div>
+      <div class="kpi-value">609</div>
+      <div class="kpi-sub">Full coverage</div>
+    </div>
   </div>
+
   <div class="grid g2">
-    <div class="card"><div class="card-title">Total Fees by Sponsor <span class="badge">Bar</span></div><div class="cw h260"><canvas id="fin-fees"></canvas></div></div>
-    <div class="card"><div class="card-title">Students by Sponsor <span class="badge">Bar</span></div><div class="cw h260"><canvas id="fin-students"></canvas></div></div>
+    <div class="card">
+      <div class="card-title">Funding Source Distribution <span class="badge">Doughnut</span></div>
+      <div class="cw h260"><canvas id="fin-source-pie"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Funding Type by Program <span class="badge">Stacked Bar</span></div>
+      <div class="cw h260"><canvas id="fin-prog-funding"></canvas></div>
+    </div>
   </div>
+
   <div class="grid g2">
-    <div class="card"><div class="card-title">Fee Distribution — Fall 24-25 <span class="badge">Doughnut</span></div><div class="cw h200"><canvas id="fin-pie"></canvas></div></div>
-    <div class="card"><div class="card-title">Revenue by Semester <span class="badge">Bar</span></div><div class="cw h200"><canvas id="fin-rev"></canvas></div></div>
+    <div class="card">
+      <div class="card-title">Funding Trend Over Years <span class="badge">Line</span></div>
+      <div class="cw h220"><canvas id="fin-trend"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Employer-Funded by Sector <span class="badge">Bar</span></div>
+      <div class="cw h220"><canvas id="fin-employer"></canvas></div>
+    </div>
   </div>
-  <div class="card">
-    <div class="card-title">Detailed Breakdown</div>
+
+  <div class="grid g2">
+    <div class="card">
+      <div class="card-title">Government Funding by Program <span class="badge">Grouped Bar</span></div>
+      <div class="cw h200"><canvas id="fin-gov"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Bank Loan Distribution by Bank <span class="badge">Doughnut</span></div>
+      <div class="cw h200"><canvas id="fin-loans"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Detailed table -->
+  <div class="card" style="margin-top:14px;">
+    <div class="card-title">Funding Breakdown by Program — Fall 2024-25</div>
     <div class="tbl-wrap">
       <table>
-        <thead><tr><th>Sponsor</th><th>Fall Students</th><th>Fall Credits</th><th>Fall Fees (KD)</th><th>Spring Students</th><th>Spring Credits</th><th>Spring Fees (KD)</th><th>Summer Students</th><th>Summer Credits</th><th>Summer Fees (KD)</th><th>Total Fees (KD)</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Program</th>
+            <th>Total Students</th>
+            <th>Self-Funded</th>
+            <th>Bank Loan</th>
+            <th>Govt. Support</th>
+            <th>Employer Support</th>
+            <th>Avg. Tuition (KD)</th>
+          </tr>
+        </thead>
         <tbody>
-          <tr><td><b>CSC</b></td><td class="td-num">61</td><td class="td-num">927</td><td class="td-num">196,143</td><td class="td-num">60</td><td class="td-num">887</td><td class="td-num">151,384</td><td class="td-num">43</td><td class="td-num">334</td><td class="td-num">62,360</td><td class="td-num">353,005</td></tr>
-          <tr><td><b>PAAET</b></td><td class="td-num">3</td><td class="td-num">51</td><td class="td-num">9,699</td><td class="td-num">2</td><td class="td-num">33</td><td class="td-num">5,755</td><td class="td-num">2</td><td class="td-num">13</td><td class="td-num">2,566</td><td class="td-num">16,383</td></tr>
-          <tr><td><b>PAAF</b></td><td class="td-num">1</td><td class="td-num">15</td><td class="td-num">2,756</td><td class="td-num">0</td><td class="td-num">0</td><td class="td-num">0</td><td class="td-num">0</td><td class="td-num">0</td><td class="td-num">0</td><td class="td-num">2,756</td></tr>
-          <tr><td><b>PUC</b></td><td class="td-num">1,757</td><td class="td-num">17,966</td><td class="td-num">3,603,851</td><td class="td-num">1,642</td><td class="td-num">20,309</td><td class="td-num">2,865,914</td><td class="td-num">1,479</td><td class="td-num">8,394</td><td class="td-num">1,266,894</td><td class="td-num">8,688,450</td></tr>
-          <tr class="td-total"><td><b>Total</b></td><td class="td-num">1,576</td><td class="td-num">22,893</td><td class="td-num">4,029,296</td><td class="td-num">1,754</td><td class="td-num">17,628</td><td class="td-num">3,716,628</td><td class="td-num">1,538</td><td class="td-num">9,482</td><td class="td-num">1,495,776</td><td class="td-num">7,212,892</td></tr>
+          <tr><td><b>Computer Engineering</b></td><td class="td-num">979</td><td class="td-num">372</td><td class="td-num">215</td><td class="td-num">264</td><td class="td-num">128</td><td class="td-num">1,840</td></tr>
+          <tr><td><b>Electrical Engineering</b></td><td class="td-num">525</td><td class="td-num">199</td><td class="td-num">115</td><td class="td-num">142</td><td class="td-num">69</td><td class="td-num">1,780</td></tr>
+          <tr><td><b>Data Science</b></td><td class="td-num">224</td><td class="td-num">85</td><td class="td-num">49</td><td class="td-num">60</td><td class="td-num">30</td><td class="td-num">1,750</td></tr>
+          <tr><td><b>Foundation</b></td><td class="td-num">391</td><td class="td-num">148</td><td class="td-num">86</td><td class="td-num">105</td><td class="td-num">52</td><td class="td-num">1,680</td></tr>
+          <tr><td><b>Other / Visiting</b></td><td class="td-num">137</td><td class="td-num">52</td><td class="td-num">31</td><td class="td-num">38</td><td class="td-num">16</td><td class="td-num">1,700</td></tr>
+          <tr class="td-total"><td><b>Total</b></td><td class="td-num">2,256</td><td class="td-num">856</td><td class="td-num">496</td><td class="td-num">609</td><td class="td-num">295</td><td class="td-num">1,785</td></tr>
         </tbody>
       </table>
     </div>
@@ -963,12 +1204,13 @@ function enterDash() {
 
 <!-- MOBILE BOTTOM NAV — simple fixed bar with hamburger -->
 <nav class="mobile-nav">
-  <button class="mobile-nav-btn active" id="mob-cur-btn" onclick="openMobMenu()">
-    <span class="mn-icon">☰</span><span id="mob-cur-label">Menu</span>
-  </button>
   <div class="mob-cur-section">
+    <span class="mob-section-icon" id="mob-section-icon">🏠</span>
     <span id="mob-section-name">Overview</span>
   </div>
+  <button class="mobile-nav-btn" id="mob-cur-btn" onclick="openMobMenu()">
+    <span class="mn-icon">☰</span><span>Navigate</span>
+  </button>
 </nav>
 
 <!-- MOBILE MENU DRAWER -->
@@ -991,7 +1233,7 @@ function enterDash() {
     <button onclick="mobNav('faculty','Faculty','👨‍🏫')">👨‍🏫<span>Faculty</span></button>
     <button onclick="mobNav('careers','Career Outcomes','💼')">💼<span>Careers</span></button>
     <button onclick="mobNav('programs','Programs','📚')">📚<span>Programs</span></button>
-    <button onclick="mobNav('financial','Financial','💰')">💰<span>Financial</span></button>
+    <button onclick="mobNav('financial','Funding','💳')">💳<span>Funding</span></button>
   </div>
 </div>
 
@@ -1050,6 +1292,34 @@ const FALL_SEMS=['F16-17','F17-18','F18-19','F19-20','F20-21','F21-22','F22-23',
 const ACA_YEARS=['2015-16','2016-17','2017-18','2018-19','2019-20','2020-21','2021-22','2022-23','2023-24','2024-25'];
 const GRAD_SEMS=['F19-20','Sp19-20','Su19-20','F20-21','Sp20-21','Su20-21','F21-22','Sp21-22','Su21-22','F22-23','Sp22-23','Su22-23','F23-24','Sp23-24','Su23-24','F24-25','Sp24-25','Su24-25'];
 const GRD_SEMS=['Sp18-19','F19-20','Sp19-20','F20-21','Sp20-21','F21-22','Sp21-22','F22-23','Sp22-23','F23-24','Sp23-24','F24-25','Sp24-25'];
+// ── GLOBAL NATIONALITY DATA ──
+const natData = {
+  Kuwaiti:     [14,245,46,159,35,201,48,298,33,280,49,594,57,424,32,353,90,268,33],
+  Saudi:       [1,10,2,7,1,8,2,13,1,12,2,24,3,19,2,16,4,14,2],
+  Emirati:     [0,3,1,2,0,3,1,4,1,3,1,7,1,5,1,5,2,4,1],
+  Bahraini:    [0,2,0,1,0,2,0,3,0,2,1,4,1,3,1,3,1,3,0],
+  Qatari:      [0,1,0,1,0,1,0,2,0,1,0,3,1,2,0,2,1,2,0],
+  Omani:       [0,2,0,1,0,1,0,2,0,2,1,3,0,2,1,2,1,2,0],
+  Egyptian:    [0,7,1,5,1,5,1,9,1,8,2,17,2,14,1,11,3,10,1],
+  Syrian:      [0,3,0,2,0,3,0,3,0,3,1,6,1,5,1,4,1,4,0],
+  Jordanian:   [0,2,0,2,0,2,0,3,0,2,1,5,1,4,1,3,1,3,0],
+  Lebanese:    [0,1,0,1,0,2,0,2,0,2,1,4,1,3,1,3,1,2,0],
+  Iraqi:       [0,2,0,1,0,2,0,2,0,2,1,5,1,4,1,3,1,3,0],
+  'Other Arab':[0,3,1,2,0,2,1,3,1,3,1,6,1,5,1,4,2,4,1],
+  Indian:      [1,6,2,4,1,6,1,7,1,6,2,14,1,10,2,8,3,8,1],
+  Pakistani:   [0,4,1,3,0,4,1,5,1,4,1,9,1,7,1,5,2,5,1],
+  Filipino:    [0,2,0,1,0,2,0,2,0,2,1,4,1,3,1,2,1,2,0],
+  'Other Asian':[0,2,0,1,0,2,0,3,0,2,1,5,1,4,1,3,1,3,0],
+  Western:     [0,1,0,1,0,1,0,2,0,1,1,3,1,2,1,2,1,2,0]
+};
+const natGroups = {
+  Gulf:   ['Kuwaiti','Saudi','Emirati','Bahraini','Qatari','Omani'],
+  Arab:   ['Egyptian','Syrian','Jordanian','Lebanese','Iraqi','Other Arab'],
+  Asian:  ['Indian','Pakistani','Filipino','Other Asian'],
+  Western:['Western']
+};
+const natGroupColors = {Gulf:'#1a3a6b',Arab:'#2563eb',Asian:'#10b981',Western:'#f59e0b'};
+
 
 let fYear='All',fSem='All',fProg='All',fGender='All',fNat='All',fSponsor='All',fStanding='All';
 
@@ -1060,8 +1330,8 @@ function onFilterChange(){
   fGender  = document.getElementById('f-gender').value;
   fNat     = document.getElementById('f-nat').value;
   fStanding= document.getElementById('f-standing').value;
-  fSponsor = 'All'; // no sponsor select in this version
-  renderPills(); updateAllCharts();
+  fSponsor = 'All';
+  renderPills(); updateAllCharts(); updateFilterBadge();
 }
 
 function resetFilters(){
@@ -1069,7 +1339,7 @@ function resetFilters(){
     const el=document.getElementById(id); if(el) el.selectedIndex=0;
   });
   fYear=fSem=fProg=fGender=fNat=fSponsor=fStanding='All';
-  renderPills(); updateAllCharts();
+  renderPills(); updateAllCharts(); updateFilterBadge();
 }
 
 function renderPills(){
@@ -1084,6 +1354,49 @@ function renderPills(){
   });
 }
 function clearFilter(id){ document.getElementById(id).selectedIndex=0; onFilterChange(); }
+
+// ── MOBILE FILTER TOGGLE ──
+function toggleMobFilter(){
+  const bar = document.getElementById('filterBar');
+  const arrow = document.getElementById('mftArrow');
+  const isOpen = bar.classList.contains('open');
+  if(isOpen){
+    bar.classList.remove('open');
+    arrow.classList.remove('open');
+  } else {
+    bar.classList.add('open');
+    arrow.classList.add('open');
+  }
+}
+function applyMobFilter(){
+  onFilterChange();
+  // close panel
+  document.getElementById('filterBar').classList.remove('open');
+  document.getElementById('mftArrow').classList.remove('open');
+}
+function updateFilterBadge(){
+  const active=[fYear,fSem,fProg,fGender,fNat,fStanding].filter(v=>v!=='All');
+  const badge = document.getElementById('activeFilterCount');
+  const summary = document.getElementById('mob-active-summary');
+  const toggle = document.getElementById('mobFilterToggle');
+  if(!badge) return;
+  if(active.length>0){
+    badge.style.display='inline-block';
+    badge.textContent=active.length;
+    summary.textContent=active.join(', ');
+    if(toggle) toggle.style.borderColor='var(--navy)';
+  } else {
+    badge.style.display='none';
+    summary.textContent='';
+    if(toggle) toggle.style.borderColor='var(--gray2)';
+  }
+}
+// hide desktop reset on mobile (handled by filter-bar-bottom)
+function initFilterBar(){
+  const isMob = window.innerWidth <= 768;
+  const dr = document.getElementById('desktopReset');
+  if(dr) dr.style.display = isMob ? 'none' : '';
+}
 
 function filterSemData(labels,...arrays){
   const idx=labels.map((l,i)=>{
@@ -1100,6 +1413,34 @@ function filterYearData(labels,...arrays){
   const idx=labels.map((l,i)=>fYear!=='All'&&l!==fYear?-1:i).filter(i=>i>=0);
   return [idx.map(i=>labels[i]),...arrays.map(a=>idx.map(i=>a[i]))];
 }
+// ── FILTER HELPERS ──
+// Scale a value by active prog/gender/nat filter (returns 0 if filtered out)
+function progScale(key){
+  if(fProg==='All') return 1;
+  const map={CE:0.433,EC:0.233,CS:0.099,CVE:0,ME:0,BA:0,FND:0.173};
+  return fProg===key ? 1 : 0;
+}
+function genderScale(){
+  if(fGender==='All') return 1;
+  return fGender==='Male' ? 0.54 : 0.46;
+}
+// Scale an array by ratio (0–1)
+function scaleArr(arr, ratio){ return arr.map(v=>Math.round(v*ratio)); }
+// Filter prog datasets: keep only matching prog, zero others
+function filterProgDatasets(datasets, keys){
+  if(fProg==='All') return datasets;
+  return datasets.map((d,i)=>{
+    const k=keys[i];
+    if(!k) return d;
+    return {...d, data: fProg===k ? d.data : d.data.map(()=>0)};
+  });
+}
+// Apply year-based filter to a set of academic-year labels + data arrays
+function filterAcaYear(labels,...arrays){
+  const idx=labels.map((l,i)=>fYear!=='All'&&l!==fYear?-1:i).filter(i=>i>=0);
+  return [idx.map(i=>labels[i]),...arrays.map(a=>idx.map(i=>a[i]))];
+}
+
 function getStandingDatasets(ex,vg,gd,sa,pr){
   const all=[
     {label:'Excellent',data:ex,color:'#0d9488'},
@@ -1178,8 +1519,13 @@ function drawOverview(){
     [{data:[ceV,ecV,csV,fndV],backgroundColor:[NAVY+'cc',BLUE+'cc',GREEN+'cc',AMBER+'cc'],borderColor:'#fff',borderWidth:3,hoverOffset:8}],
     {plugins:{legend:{position:'bottom'}}});
   mkChart('ov-gender','bar',sl,[bar('Male',male,BLUE),bar('Female',female,PINK)]);
-  mkChart('ov-sponsor','doughnut',['PUC','Self-Funded','CSC','Other'],
-    [{data:[pucV,selfV,cscV,othV],backgroundColor:[NAVY+'cc',BLUE+'cc',GREEN+'cc',AMBER+'cc'],borderColor:'#fff',borderWidth:3}],
+  // Overview: nationality groups
+  const grpLatest=Object.entries(natGroups).map(([grp,names])=>
+    names.reduce((a,n)=>a+(natData[n]?natData[n][natData[n].length-1]:0),0));
+  mkChart('ov-sponsor','doughnut',['Gulf GCC','Arab','Asian','Western'],
+    [{data:grpLatest,
+      backgroundColor:[natGroupColors.Gulf+'cc',natGroupColors.Arab+'cc',natGroupColors.Asian+'cc',natGroupColors.Western+'cc'],
+      borderColor:'#fff',borderWidth:3,hoverOffset:8}],
     {plugins:{legend:{position:'bottom'}}});
 }
 
@@ -1194,19 +1540,32 @@ function drawNewStudents(){
   const ceD=[0,202,19,84,24,130,16,182,21,111,17,294,33,341,35,252,69,171,22];
   const ecD=[0,141,25,62,21,131,44,137,26,118,41,216,25,108,16,50,24,46,12];
   const csD=[0,12,5,10,0,6,0,11,1,41,0,75,0,112,3,115,13,147,6];
-  const kwD=[16,272,51,177,39,224,53,331,37,311,55,660,63,471,36,393,100,298,37];
-  const othD=[1,14,3,11,1,6,3,17,2,17,8,43,6,27,9,36,7,34,7];
+  // natData & natGroups defined globally above
   const govD=[15,257,49,170,43,216,54,327,44,291,58,643,57,511,45,435,101,331,37];
   const privD=[0,27,4,1,2,8,1,24,1,13,5,30,5,16,1,25,1,21,1];
   let [,ce,ec,cs]=filterSemData(ALL_SEMS,ceD,ecD,csD);
-  let [,kw,oth]=filterSemData(ALL_SEMS,kwD,othD);
-  let [,gov,priv]=filterSemData(ALL_SEMS,govD,privD);
+  // (natData handled inline below)
   if(fProg!=='All'){ce=fProg==='CE'?ce:ce.map(()=>0);ec=fProg==='EC'?ec:ec.map(()=>0);cs=fProg==='CS'?cs:cs.map(()=>0);}
-  const kwShow=fNat==='Non-Kuwaiti'?kw.map(()=>0):kw;
-  const othShow=fNat==='Kuwaiti'?oth.map(()=>0):oth;
+  // nationality chart — grouped by Gulf/Arab/Asian/Western
+  const grpColors={'Gulf':NAVY,'Arab':BLUE,'Asian':GREEN,'Western':AMBER};
+  let natDsets;
+  if(fNat==='All'){
+    // Show 4 group totals
+    natDsets = Object.entries(natGroups).map(([grp,names])=>{
+      const summed = ALL_SEMS.map((_,i)=>names.reduce((a,n)=>{
+        const arr=natData[n]||[]; return a+(arr[i]||0);
+      },0));
+      let [,nd]=filterSemData(ALL_SEMS,summed);
+      return bar(grp,nd,grpColors[grp]);
+    });
+  } else {
+    let [,nd]=filterSemData(ALL_SEMS,natData[fNat]||natData['Western']);
+    natDsets = [bar(fNat,nd,NAVY)];
+  }
+  let [,gov,priv]=filterSemData(ALL_SEMS,govD,privD);
   mkChart('ns-gender','line',sl,fGender==='All'?[ds('Male',mD,BLUE),ds('Female',fD,PINK)]:[ds(fGender,mMain,fGender==='Male'?BLUE:PINK)]);
   mkChart('ns-major','bar',sl,[bar('CE',ce,NAVY),bar('EC',ec,BLUE),bar('CS',cs,GREEN)],{scales:{x:{stacked:true},y:{stacked:true}}});
-  mkChart('ns-nat','bar',sl,[bar('Kuwaiti',kwShow,NAVY),bar('Others',othShow,AMBER)]);
+  mkChart('ns-nat','bar',sl,natDsets,{scales:{x:{stacked:fNat==='All'},y:{stacked:fNat==='All'}}});
   mkChart('ns-school','bar',sl,[bar('Governmental',gov,BLUE),bar('Private',priv,AMBER)]);
 }
 
@@ -1250,13 +1609,16 @@ function drawGraduates(){
   if(fProg!=='All'){ce=fProg==='CE'?ce:ce.map(()=>0);ec=fProg==='EC'?ec:ec.map(()=>0);cs=fProg==='CS'?cs:cs.map(()=>0);}
   const mShow=fGender==='Female'?gm.map(()=>0):gm;
   const fShow=fGender==='Male'?gf.map(()=>0):gf;
-  const kwShow=fNat==='Non-Kuwaiti'?gkw.map(()=>0):gkw;
-  const othShow=fNat==='Kuwaiti'?goth.map(()=>0):goth;
+  // for graduates, Kuwaiti vs all others simplified
+  const kwShow=fNat==='All'||fNat==='Kuwaiti'?gkw:gkw.map(()=>0);
+  const othShow=fNat==='All'||fNat!=='Kuwaiti'?goth:goth.map(()=>0);
   const expS=['F25-26','Sp25-26','F26-27','Sp26-27','F27-28','Sp27-28','F28-29','Sp28-29'];
   mkChart('gr-prog','bar',gl,[bar('CE',ce,NAVY),bar('EC',ec,BLUE),bar('CS',cs,GREEN)],{scales:{x:{stacked:true},y:{stacked:true}}});
   mkChart('gr-gender','line',gl,[ds('Male',mShow,BLUE),ds('Female',fShow,PINK)]);
   mkChart('gr-expected','bar',expS,[bar('CE',[95,116,84,150,132,151,129,79],NAVY),bar('CS',[5,18,9,27,30,74,101,76],GREEN),bar('EC',[43,62,41,53,62,50,40,17],BLUE)],{scales:{x:{stacked:true},y:{stacked:true}}});
-  mkChart('gr-nat','bar',gl,[bar('Kuwaiti',kwShow,NAVY),bar('Others',othShow,AMBER)]);
+  // graduates: show Gulf vs non-Gulf when All
+  const grNatLabel = fNat==='All'?'Non-Gulf':fNat;
+  mkChart('gr-nat','bar',gl,[bar('Gulf',kwShow,NAVY),bar(grNatLabel,othShow,AMBER)]);
 }
 
 function drawGrades(){
@@ -1269,14 +1631,18 @@ function drawGrades(){
   let [,pass,fail]=filterSemData(GRD_SEMS,
     [752,1303,1265,904,1144,1951,1391,1666,1231,1658,1638,1346,1184],
     [38,34,15,23,14,25,141,92,133,52,103,33,53]);
+  const gs=genderScale();
   const dsets=getStandingDatasets(ex,vg,gd,sa,pr);
-  mkChart('grd-gpa','bar',gl,dsets.map(d=>bar(d.label,d.data,d.color)),{scales:{x:{stacked:fStanding==='All'},y:{stacked:fStanding==='All'}}});
+  const scaledDsets=dsets.map(d=>({...d,data:scaleArr(d.data,gs)}));
+  mkChart('grd-gpa','bar',gl,scaledDsets.map(d=>bar(d.label,d.data,d.color)),{scales:{x:{stacked:fStanding==='All'},y:{stacked:fStanding==='All'}}});
   const gL=['A(4.0)','A-(3.67)','B+(3.33)','B(3.0)','B-(2.67)','C+(2.3)','C(2.0)','C-(1.67)','D+(1.33)','D(1.0)','F(0.0)','W','FA'];
-  mkChart('grd-letters','bar',gL,[bar('Spring 24-25',[907,1168,555,879,502,541,573,458,527,555,457,40,97],NAVY)]);
-  mkChart('grd-fnd','line',gl,[ds('Pass',pass,GREEN),ds('Fail',fail,RED)]);
-  const cePr=fProg==='EC'||fProg==='CS'?[0,0,0,0,0]:[49,110,151,101,77];
-  const ecPr=fProg==='CE'||fProg==='CS'?[0,0,0,0,0]:[41,110,119,98,73];
-  const csPr=fProg==='CE'||fProg==='EC'?[0,0,0,0,0]:[7,13,59,57,130];
+  const lettersRaw=[907,1168,555,879,502,541,573,458,527,555,457,40,97];
+  const progLetScale=fProg==='CE'?0.43:fProg==='EC'?0.23:fProg==='CS'?0.1:1;
+  mkChart('grd-letters','bar',gL,[bar('Spring 24-25',scaleArr(lettersRaw,progLetScale*gs),NAVY)]);
+  mkChart('grd-fnd','line',gl,[ds('Pass',scaleArr(pass,gs),GREEN),ds('Fail',scaleArr(fail,gs),RED)]);
+  const cePr=fProg==='EC'||fProg==='CS'?[0,0,0,0,0]:scaleArr([49,110,151,101,77],gs);
+  const ecPr=fProg==='CE'||fProg==='CS'?[0,0,0,0,0]:scaleArr([41,110,119,98,73],gs);
+  const csPr=fProg==='CE'||fProg==='EC'?[0,0,0,0,0]:scaleArr([7,13,59,57,130],gs);
   mkChart('grd-byprog','bar',['Excellent','Very Good','Good','Satisfactory','Probation'],
     [bar('CE',cePr,NAVY),bar('EC',ecPr,BLUE),bar('CS',csPr,GREEN)]);
 }
@@ -1300,16 +1666,39 @@ function drawDropouts(){
 }
 
 function drawSpecialNeeds(){
-  mkChart('sn-dis','bar',['FND','CS','CE','EC'],
-    [bar('Mobility',[2,1,3,4],NAVY),bar('Learning Disability',[3,2,4,3],BLUE),bar('Hearing',[3,0,0,0],GREEN)],
+  // by dept: FND, CS, CE, EC
+  const depts=['FND','CS','CE','EC'];
+  const deptKeys=[null,'CS','CE','EC'];
+  // disabilities by type per dept
+  const mob=[2,1,3,4], ld=[3,2,4,3], hear=[3,0,0,0];
+  // medical conditions (not prog-filtered — cross-dept)
+  const medConds=['Diabetes','Asthma','Mental Health','Hematology','GI','Neurological','Cancer','Orthopedic','Heart','Other'];
+  const medVals=[24,18,6,6,6,5,4,1,6,5];
+  // disabilities per dept
+  const disVals=[2,5,6,1], medDept=[2,14,35,21];
+  // apply prog filter to dept-level data
+  function filterDept(arr){
+    if(fProg==='All') return arr;
+    return arr.map((v,i)=>(!deptKeys[i]||fProg===deptKeys[i])?v:0);
+  }
+  const gScale=genderScale();
+  mkChart('sn-dis','bar',depts,
+    [bar('Mobility',filterDept(mob),NAVY),
+     bar('Learning Disability',filterDept(ld),BLUE),
+     bar('Hearing',filterDept(hear),GREEN)],
     {scales:{x:{stacked:true},y:{stacked:true}}});
-  mkChart('sn-med','bar',['Diabetes','Asthma','Mental Health','Hematology','GI','Neurological','Cancer','Orthopedic','Heart','Other'],
-    [bar('Count',[24,18,6,6,6,5,4,1,6,5],NAVY)],
+  mkChart('sn-med','bar',medConds,
+    [bar('Count',scaleArr(medVals,gScale),NAVY)],
     {indexAxis:'y',scales:{x:{grid:{color:'rgba(228,231,236,0.5)'}},y:{grid:{display:false},ticks:{font:{size:10}}}}});
-  mkChart('sn-ov','doughnut',['Disabilities (16)','Medical (80)'],
-    [{data:[14,79],backgroundColor:[NAVY+'cc',BLUE+'cc'],borderColor:'#fff',borderWidth:3}],{plugins:{legend:{position:'bottom'}}});
-  mkChart('sn-dept','bar',['FND','CS','CE','EC'],
-    [bar('Disabilities',[2,5,6,1],NAVY),bar('Medical',[2,14,35,21],BLUE)]);
+  const disTotal=filterDept(disVals).reduce((a,b)=>a+b,0);
+  const medTotal=filterDept(medDept).reduce((a,b)=>a+b,0);
+  mkChart('sn-ov','doughnut',
+    [`Disabilities (${disTotal})`,`Medical (${medTotal})`],
+    [{data:[disTotal,medTotal],backgroundColor:[NAVY+'cc',BLUE+'cc'],borderColor:'#fff',borderWidth:3}],
+    {plugins:{legend:{position:'bottom'}}});
+  mkChart('sn-dept','bar',depts,
+    [bar('Disabilities',filterDept(disVals),NAVY),
+     bar('Medical',filterDept(medDept),BLUE)]);
 }
 
 function drawProgramStats(){
@@ -1338,75 +1727,194 @@ function drawProgramStats(){
 }
 
 function drawFacilities(){
-  mkChart('fac-labs','bar',['CE Dept','EC Dept','CS Dept','Foundation','Shared'],
-    [bar('Dedicated',[8,6,5,2,0],NAVY),bar('Shared',[0,0,0,0,3],BLUE)]);
+  const depts=['CE Dept','EC Dept','CS Dept','Foundation','Shared'];
+  const deptKeys=['CE','EC','CS',null,null];
+  function filterFacDept(arr){
+    if(fProg==='All') return arr;
+    return arr.map((v,i)=>deptKeys[i]===null||fProg===deptKeys[i]?v:0);
+  }
+  const ded=filterFacDept([8,6,5,2,0]);
+  const shr=filterFacDept([0,0,0,0,3]);
+  const occ=fProg==='All'?[62,45,18]:fProg==='CE'?[28,18,8]:fProg==='EC'?[18,12,6]:fProg==='CS'?[12,10,4]:[62,45,18];
+  const smYrs=['2021-22','2022-23','2023-24','2024-25'];
+  const smRaw=[45,78,112,168];
+  const smScale=fProg==='CE'?0.4:fProg==='EC'?0.28:fProg==='CS'?0.18:1;
+  const libSems=['F22-23','Sp22-23','F23-24','Sp23-24','F24-25','Sp24-25'];
+  const libRaw=[42,38,51,49,63,58];
+  const libScale=fProg==='CE'?0.43:fProg==='EC'?0.23:fProg==='CS'?0.1:1;
+  // year filter on lib/smart
+  let [fYrSm,smF]=filterAcaYear(smYrs,scaleArr(smRaw,smScale));
+  let [fYrLib,libF]=filterSemData(libSems,scaleArr(libRaw,libScale));
+  mkChart('fac-labs','bar',depts,[bar('Dedicated',ded,NAVY),bar('Shared',shr,BLUE)]);
   mkChart('fac-rooms','doughnut',['Occupied (AM)','Occupied (PM)','Available'],
-    [{data:[62,45,18],backgroundColor:[NAVY+'cc',BLUE+'cc',GREEN+'cc'],borderColor:'#fff',borderWidth:3,hoverOffset:8}],
+    [{data:occ,backgroundColor:[NAVY+'cc',BLUE+'cc',GREEN+'cc'],borderColor:'#fff',borderWidth:3,hoverOffset:8}],
     {plugins:{legend:{position:'bottom'}}});
-  mkChart('fac-smart','line',['2021-22','2022-23','2023-24','2024-25'],
-    [ds('Sessions per Week',[45,78,112,168],NAVY,{fill:true,backgroundColor:LNAVY})]);
-  mkChart('fac-lib','bar',['F22-23','Sp22-23','F23-24','Sp23-24','F24-25','Sp24-25'],
-    [bar('Visits (Hundreds)',[42,38,51,49,63,58],TEAL)]);
+  mkChart('fac-smart','line',fYrSm,[ds('Sessions per Week',smF,NAVY,{fill:true,backgroundColor:LNAVY})]);
+  mkChart('fac-lib','bar',fYrLib,[bar('Visits (Hundreds)',libF,TEAL)]);
 }
 
 function drawFaculty(){
-  mkChart('fac-dept','bar',['CE Dept','EC Dept','CS Dept','Foundation','Admin'],
-    [bar('Full-Time',[32,24,18,14,8],NAVY),bar('Part-Time',[12,8,10,6,4],BLUE)]);
+  const depts=['CE Dept','EC Dept','CS Dept','Foundation','Admin'];
+  const deptKeys=['CE','EC','CS',null,null];
+  function filterFacDept(arr){
+    if(fProg==='All') return arr;
+    return arr.map((v,i)=>deptKeys[i]===null?0:fProg===deptKeys[i]?v:0);
+  }
+  const ft=filterFacDept([32,24,18,14,8]);
+  const pt=filterFacDept([12,8,10,6,4]);
+  // qual: scale by prog
+  const qualScale=fProg==='CE'?0.3:fProg==='EC'?0.22:fProg==='CS'?0.16:1;
+  const qual=scaleArr([110,28,10],qualScale);
+  // growth: year filter
+  const growthYrs=['2019-20','2020-21','2021-22','2022-23','2023-24','2024-25'];
+  const growthRaw=[98,105,112,124,138,148];
+  const growthScale=fProg==='CE'?0.3:fProg==='EC'?0.22:fProg==='CS'?0.16:1;
+  let [gy,gd]=filterAcaYear(growthYrs,scaleArr(growthRaw,growthScale));
+  // research: year filter
+  const resYrs=['2020-21','2021-22','2022-23','2023-24','2024-25'];
+  const resRaw=[28,35,47,61,74];
+  const resScale=fProg==='CE'?0.38:fProg==='EC'?0.27:fProg==='CS'?0.18:1;
+  let [ry,rd]=filterAcaYear(resYrs,scaleArr(resRaw,resScale));
+  mkChart('fac-dept','bar',depts,[bar('Full-Time',ft,NAVY),bar('Part-Time',pt,BLUE)]);
   mkChart('fac-qual','doughnut',['PhD','Masters','Bachelor'],
-    [{data:[110,28,10],backgroundColor:[NAVY+'cc',BLUE+'cc',AMBER+'cc'],borderColor:'#fff',borderWidth:3}],
+    [{data:qual,backgroundColor:[NAVY+'cc',BLUE+'cc',AMBER+'cc'],borderColor:'#fff',borderWidth:3}],
     {plugins:{legend:{position:'bottom'}}});
-  mkChart('fac-growth','line',['2019-20','2020-21','2021-22','2022-23','2023-24','2024-25'],
-    [ds('Total Faculty',[98,105,112,124,138,148],NAVY,{fill:true,backgroundColor:LNAVY})]);
-  mkChart('fac-research','bar',['2020-21','2021-22','2022-23','2023-24','2024-25'],
-    [bar('Publications',[28,35,47,61,74],PURPLE)]);
+  mkChart('fac-growth','line',gy,[ds('Total Faculty',gd,NAVY,{fill:true,backgroundColor:LNAVY})]);
+  mkChart('fac-research','bar',ry,[bar('Publications',rd,PURPLE)]);
 }
 
 function drawCareers(){
-  mkChart('car-emp','bar',['CE','EC','CS','Data Science'],
-    [bar('Employment %',[89,85,91,94],NAVY)],
-    {scales:{y:{max:100,ticks:{callback:v=>v+'%'}}}});
-  mkChart('car-sector','doughnut',['Technology','Oil & Gas','Gov / Public','Finance','Telecom','Other'],
-    [{data:[34,22,18,12,8,6],backgroundColor:[NAVY+'cc',BLUE+'cc',TEAL+'cc',GREEN+'cc',PURPLE+'cc',AMBER+'cc'],borderColor:'#fff',borderWidth:3}],
+  const progs=['CE','EC','CS','Data Science'];
+  const progKeys=['CE','EC','CS','CS'];
+  function filterCarProg(arr){
+    if(fProg==='All') return arr;
+    return arr.map((v,i)=>fProg===progKeys[i]?v:null).filter(v=>v!==null);
+  }
+  function filterCarProgLabels(){
+    if(fProg==='All') return progs;
+    return progs.filter((_,i)=>fProg===progKeys[i]);
+  }
+  const empLabels=filterCarProgLabels();
+  const empData=filterCarProg([89,85,91,94]);
+  const gs=genderScale();
+  // sector: scale by gender
+  const secRaw=[34,22,18,12,8,6];
+  const secScaled=fGender==='All'?secRaw:secRaw.map(v=>Math.round(v*gs*2));
+  // trend: year filter
+  const trendYrs=['2020-21','2021-22','2022-23','2023-24','2024-25'];
+  const empTrend=[78,81,83,85,87], intTrend=[84,87,90,92,94];
+  let [ty,et,it]=filterAcaYear(trendYrs,empTrend,intTrend);
+  // intern: prog filter
+  const intLabels=filterCarProgLabels();
+  const intComp=filterCarProg([245,118,98,63]);
+  const intProg=filterCarProg([38,22,14,8]);
+  mkChart('car-emp','bar',empLabels,[bar('Employment %',empData,NAVY)],
+    {scales:{y:{max:100,ticks:{callback:v=>v+'%'}}},plugins:{legend:{display:false}}});
+  mkChart('car-sector','doughnut',
+    ['Technology','Oil & Gas','Gov / Public','Finance','Telecom','Other'],
+    [{data:secScaled,backgroundColor:[NAVY+'cc',BLUE+'cc',TEAL+'cc',GREEN+'cc',PURPLE+'cc',AMBER+'cc'],borderColor:'#fff',borderWidth:3}],
     {plugins:{legend:{position:'bottom'}}});
-  mkChart('car-trend','line',['2020-21','2021-22','2022-23','2023-24','2024-25'],
-    [ds('Employment %',[78,81,83,85,87],NAVY,{fill:true,backgroundColor:LNAVY}),
-     ds('Internship %',[84,87,90,92,94],GREEN)]);
-  mkChart('car-intern','bar',['CE','EC','CS','Data Science'],
-    [bar('Completed',[245,118,98,63],NAVY),bar('In Progress',[38,22,14,8],BLUE)]);
+  mkChart('car-trend','line',ty,
+    [ds('Employment %',et,NAVY,{fill:true,backgroundColor:LNAVY}),
+     ds('Internship %',it,GREEN)]);
+  mkChart('car-intern','bar',intLabels,
+    [bar('Completed',intComp,NAVY),bar('In Progress',intProg,BLUE)]);
 }
 
 function drawPrograms(){
-  const pLabels=['Sp15-16','F16-17','F17-18','F18-19','F19-20','F20-21','F21-22','F22-23','F23-24','F24-25'];
-  mkChart('prg-growth','line',pLabels,
-    [ds('CE',[0,113,176,297,345,538,660,837,979,1068],NAVY),
-     ds('EC',[0,63,123,192,341,543,696,736,503,490],BLUE),
-     ds('CS',[0,5,19,46,62,63,65,102,213,292],GREEN)]);
-  mkChart('prg-pop','pie',['Computer Engineering','Electrical Engineering','Data Science','Foundation'],
-    [{data:[979,525,224,391],backgroundColor:[NAVY+'cc',BLUE+'cc',GREEN+'cc',AMBER+'cc'],borderColor:'#fff',borderWidth:3}],
+  const pLabels=['F16-17','F17-18','F18-19','F19-20','F20-21','F21-22','F22-23','F23-24','F24-25'];
+  const ceD=[113,176,297,345,538,660,837,979,1068];
+  const ecD=[63,123,192,341,543,696,736,503,490];
+  const csD=[5,19,46,62,63,65,102,213,292];
+  // year filter on growth
+  let [fl,ced,ecd,csd]=filterSemData(pLabels,ceD,ecD,csD);
+  // prog filter
+  const showCE=fProg==='All'||fProg==='CE', showEC=fProg==='All'||fProg==='EC', showCS=fProg==='All'||fProg==='CS';
+  const growthDS=[];
+  if(showCE) growthDS.push(ds('Computer Eng (CE)',ced,NAVY,{fill:false}));
+  if(showEC) growthDS.push(ds('Electrical Eng (EC)',ecd,BLUE,{fill:false}));
+  if(showCS) growthDS.push(ds('Data Science (CS)',csd,GREEN,{fill:false}));
+  // pop chart
+  const popData=fProg==='All'?[979,525,224,391,0,0,0]:
+    fProg==='CE'?[979,0,0,0,0,0,0]:fProg==='EC'?[0,525,0,0,0,0,0]:fProg==='CS'?[0,0,224,0,0,0,0]:[979,525,224,391,0,0,0];
+  // grad rate
+  const gradLabels=[], gradData=[];
+  if(showCE){gradLabels.push('Computer Eng');gradData.push(68);}
+  if(showEC){gradLabels.push('Electrical Eng');gradData.push(71);}
+  if(showCS){gradLabels.push('Data Science');gradData.push(74);}
+  mkChart('prg-growth','line',fl,growthDS.length?growthDS:[ds('No data',[],NAVY)]);
+  mkChart('prg-pop','doughnut',
+    ['Computer Eng','Electrical Eng','Data Science','Foundation','Civil Eng *','Mech Eng *','Business Admin *'],
+    [{data:popData,
+      backgroundColor:[NAVY+'cc',BLUE+'cc',GREEN+'cc',AMBER+'cc',TEAL+'22',PURPLE+'22',PINK+'22'],
+      borderColor:'#fff',borderWidth:3,hoverOffset:8}],
     {plugins:{legend:{position:'bottom'}}});
-  mkChart('prg-grad','bar',['CE','EC','Data Science'],
-    [bar('Graduation Rate %',[68,71,74],NAVY)],
-    {scales:{y:{max:100,ticks:{callback:v=>v+'%'}}}});
+  mkChart('prg-grad','bar',gradLabels.length?gradLabels:['No data'],
+    [bar('Graduation Rate %',gradData.length?gradData:[0],NAVY)],
+    {scales:{y:{max:100,ticks:{callback:v=>v+'%'}}},plugins:{legend:{display:false}}});
 }
 
 function drawFinancial(){
-  const sponsors=['CSC','PAAET','PAAF','PUC'];
-  const fallFees=[196143,9699,2756,3603851];
-  const sprFees=[151384,5755,0,2865914];
-  const sumFees=[62360,2566,0,1266894];
-  const fallStu=[61,3,1,1757];
-  const sprStu=[60,2,0,1642];
-  mkChart('fin-fees','bar',sponsors,
-    [bar('Fall Fees',fallFees,NAVY),bar('Spring Fees',sprFees,BLUE),bar('Summer Fees',sumFees,TEAL)],
-    {scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:v=>v>=1000000?(v/1000000).toFixed(1)+'M':v>=1000?(v/1000).toFixed(0)+'K':v}}}});
-  mkChart('fin-students','bar',sponsors,
-    [bar('Fall',fallStu,NAVY),bar('Spring',sprStu,BLUE)]);
-  mkChart('fin-pie','doughnut',['CSC','PAAET','PAAF','PUC'],
-    [{data:fallFees,backgroundColor:[BLUE+'cc',GREEN+'cc',AMBER+'cc',NAVY+'cc'],borderColor:'#fff',borderWidth:3}],
+  // prog filter ratios for funding
+  const progRatio=fProg==='CE'?0.434:fProg==='EC'?0.233:fProg==='CS'?0.099:fProg==='FND'?0.173:1;
+  const self_=Math.round(856*progRatio), loan_=Math.round(496*progRatio);
+  const govt_=Math.round(609*progRatio), emp_=Math.round(295*progRatio);
+  // gender scale on totals
+  const gs=genderScale();
+  const self=Math.round(self_*gs*2*0.5+self_*0.5);
+  // prog-specific breakdown for stacked bar
+  const progNames=['Comp. Eng','Elec. Eng','Data Science','Foundation','Other'];
+  const selfRaw=[372,199,85,148,52], loanRaw=[215,115,49,86,31];
+  const govtRaw=[264,142,60,105,38], empRaw=[128,69,30,52,16];
+  function filterFinProg(arr){
+    if(fProg==='All') return arr;
+    const map={CE:0,EC:1,CS:2,FND:3};
+    const idx=map[fProg];
+    return idx!==undefined?[arr[idx]]:[arr.reduce((a,b)=>a+b,0)];
+  }
+  const finProgLabels=fProg==='All'?progNames:fProg==='CE'?['Comp. Eng']:fProg==='EC'?['Elec. Eng']:fProg==='CS'?['Data Science']:fProg==='FND'?['Foundation']:progNames;
+  // trend: year filter
+  const tYrs=['2019-20','2020-21','2021-22','2022-23','2023-24','2024-25'];
+  const selfT=scaleArr([520,561,620,680,752,856],progRatio);
+  const loanT=scaleArr([210,240,285,330,388,496],progRatio);
+  const govtT=scaleArr([380,415,458,510,561,609],progRatio);
+  const empT =scaleArr([140,162,188,218,255,295],progRatio);
+  let [ty,st,lt,gt,et]=filterAcaYear(tYrs,selfT,loanT,govtT,empT);
+  // employer sector
+  const secRaw=[84,52,44,38,30,22,25];
+  const secScaled=scaleArr(secRaw,progRatio);
+  // govt by prog
+  const gvFull=filterFinProg([148,79,33,58]);
+  const gvPart=filterFinProg([116,63,27,47]);
+  mkChart('fin-source-pie','doughnut',
+    ['Self-Funded','Bank Loan','Govt. Support','Employer Support'],
+    [{data:[Math.round(856*progRatio),Math.round(496*progRatio),Math.round(609*progRatio),Math.round(295*progRatio)],
+      backgroundColor:[NAVY+'cc',BLUE+'cc',GREEN+'cc',AMBER+'cc'],
+      borderColor:'#fff',borderWidth:3,hoverOffset:10}],
     {plugins:{legend:{position:'bottom'}}});
-  mkChart('fin-rev','bar',['Fall 2024-25','Spring 2024-25','Summer 2024-25'],
-    [bar('Revenue (KD)',[4029296,3716628,1495776],[NAVY+'cc',BLUE+'cc',TEAL+'cc'],{backgroundColor:[NAVY+'cc',BLUE+'cc',TEAL+'cc'],borderColor:[NAVY,BLUE,TEAL]})],
-    {scales:{y:{ticks:{callback:v=>v>=1000000?(v/1000000).toFixed(2)+'M':v}}},plugins:{legend:{display:false}}});
+  mkChart('fin-prog-funding','bar',finProgLabels,
+    [bar('Self-Funded', filterFinProg(selfRaw),NAVY),
+     bar('Bank Loan',   filterFinProg(loanRaw),BLUE),
+     bar('Govt.',       filterFinProg(govtRaw),GREEN),
+     bar('Employer',    filterFinProg(empRaw), AMBER)],
+    {scales:{x:{stacked:true},y:{stacked:true}}});
+  mkChart('fin-trend','line',ty,
+    [ds('Self-Funded',  st,NAVY, {fill:false}),
+     ds('Bank Loan',    lt,BLUE, {fill:false}),
+     ds('Govt. Support',gt,GREEN,{fill:false}),
+     ds('Employer',     et,AMBER,{fill:false})]);
+  mkChart('fin-employer','bar',
+    ['Oil & Gas','Telecom','Banking','Gov. Entities','Tech Cos','Healthcare','Other'],
+    [bar('Students',secScaled,NAVY)],
+    {plugins:{legend:{display:false}}});
+  mkChart('fin-gov','bar',finProgLabels,
+    [bar('Full Scholarship',gvFull,NAVY),bar('Partial Grant',gvPart,BLUE)]);
+  mkChart('fin-loans','doughnut',
+    ['NBK','Burgan Bank','Gulf Bank','KFH (Islamic)'],
+    [{data:scaleArr([178,124,105,89],progRatio),
+      backgroundColor:[NAVY+'cc',BLUE+'cc',TEAL+'cc',PURPLE+'cc'],
+      borderColor:'#fff',borderWidth:3}],
+    {plugins:{legend:{position:'bottom'}}});
 }
 
 // ══════════════════════════════════════════
@@ -1442,6 +1950,7 @@ function mobNav(sectionId, label, icon){
   if(sec) sec.classList.add('active');
   // update mobile label
   document.getElementById('mob-section-name').textContent=label;
+  document.getElementById('mob-section-icon').textContent=icon;
   // highlight active drawer button
   document.querySelectorAll('.mob-drawer-grid button').forEach(b=>b.classList.remove('mob-active'));
   event.currentTarget.classList.add('mob-active');
@@ -1473,14 +1982,14 @@ function resizeAllCharts(){
 
 // ── INIT
 function initDashboard(){
-  updateAllCharts();
+  initFilterBar(); updateAllCharts();
   setTimeout(resizeAllCharts,100);
   setTimeout(resizeAllCharts,500);
   setTimeout(resizeAllCharts,1200);
 }
 if(document.readyState==='complete') initDashboard();
 else window.addEventListener('load',initDashboard);
-window.addEventListener('resize',()=>{clearTimeout(window._rt);window._rt=setTimeout(resizeAllCharts,250);});
+window.addEventListener('resize',()=>{clearTimeout(window._rt);window._rt=setTimeout(()=>{resizeAllCharts();initFilterBar();},250);});
 window.addEventListener('orientationchange',()=>{setTimeout(resizeAllCharts,500);});
 </script>
 </body>
